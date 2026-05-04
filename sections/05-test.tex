@@ -1,0 +1,93 @@
+\section{系统测试与分析}
+
+\subsection{测试目标}
+
+系统测试围绕功能正确性、控制稳定性、电池保护有效性和无线监控可靠性展开。测试过程应覆盖单模块调试、功率级联调、整机运行和异常工况验证四个阶段。由于光储逆变系统涉及高压母线和交流输出，测试时需先在限压、限流和假负载条件下验证控制逻辑，再逐步提升至额定工作点。
+
+\subsection{仿真测试}
+
+仿真测试用于在样机上电前验证主功率拓扑和控制策略。开环仿真重点观察电感电流连续性、开关节点电压、器件电压应力和母线电压建立过程；闭环仿真重点验证 MPPT 收敛、母线稳压、负载阶跃响应和电池充放电切换。
+
+\begin{figure}[htbp]
+  \centering
+  \fbox{\parbox[c][3.2cm][c]{0.88\linewidth}{\centering
+  此处插入 LTspice 开环仿真波形：\\
+  电感电流、开关节点电压、母线电压、端口功率
+  }}
+  \caption{前级三端口变换器开环仿真波形占位}
+  \label{fig:ltspice_waveform}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \fbox{\parbox[c][3.2cm][c]{0.88\linewidth}{\centering
+  此处插入 Simulink 闭环仿真波形：\\
+  MPPT 功率、母线电压、负载阶跃、模式切换
+  }}
+  \caption{系统闭环控制仿真波形占位}
+  \label{fig:simulink_waveform}
+\end{figure}
+
+\subsection{硬件功能测试}
+
+硬件功能测试首先验证辅助电源、MCU 最小系统、ADC 采样、PWM 输出、驱动波形和通信接口。确认低压控制信号正确后，再接入功率器件和假负载进行限流测试。测试中应重点记录以下内容：
+
+\begin{enumerate}[label=\arabic*、, leftmargin=*, itemsep=0.8ex, parsep=0pt, topsep=0.5ex]
+  \item PWM 频率、占空比更新和死区时间是否符合设计值。
+  \item ADC 采样值与万用表、示波器或功率分析仪读数的误差。
+  \item 驱动输出上升沿、下降沿、过冲和欠压锁定功能。
+  \item 硬件过流、过压和过温保护是否能够及时触发。
+  \item MCU 间通信在正常运行和故障状态下是否稳定。
+\end{enumerate}
+
+\subsection{整机性能测试}
+
+整机测试包括稳态效率、输出电压质量、动态响应和温升测试。表 \ref{tab:test_plan} 给出了建议测试项目。当前论文先保留测试框架，后续应填入样机实测数据。
+
+\begin{table}[htbp]
+  \centering
+  \caption{整机测试项目与记录内容}
+  \label{tab:test_plan}
+  \begin{tabular}{|p{0.22\linewidth}|p{0.34\linewidth}|p{0.32\linewidth}|}
+    \hline
+    测试项目 & 测试方法 & 记录内容 \\
+    \hline
+    光伏 MPPT & 使用可调电源或光伏模拟源改变输入条件 & 最大功率跟踪过程、稳态功率、收敛时间 \\
+    \hline
+    母线稳压 & 改变负载功率和电池充放电状态 & 母线电压纹波、过冲、恢复时间 \\
+    \hline
+    逆变输出 & 接入阻性或典型交流负载 & 输出电压、频率、波形畸变、带载能力 \\
+    \hline
+    电池保护 & 模拟过压、欠压、过温和过流条件 & BMS 故障码、保护动作时间、恢复逻辑 \\
+    \hline
+    无线监控 & 长时间上传运行数据并下发配置参数 & 丢包率、响应时间、异常告警准确性 \\
+    \hline
+    温升测试 & 额定功率连续运行 & 开关管、电感、电容、散热器和 PCB 温度 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+  \centering
+  \caption{关键测试数据记录表}
+  \label{tab:test_data}
+  \begin{tabular}{|p{0.2\linewidth}|p{0.18\linewidth}|p{0.18\linewidth}|p{0.26\linewidth}|}
+    \hline
+    工况 & 输入功率 & 输出功率 & 结果说明 \\
+    \hline
+    轻载 & \todo{填写} & \todo{填写} & \todo{效率、纹波、温升} \\
+    \hline
+    半载 & \todo{填写} & \todo{填写} & \todo{效率、动态响应} \\
+    \hline
+    额定负载 & \todo{填写} & \todo{填写} & \todo{效率、温升、稳定性} \\
+    \hline
+    负载阶跃 & \todo{填写} & \todo{填写} & \todo{母线跌落和恢复时间} \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\subsection{结果分析}
+
+从设计目标看，系统性能评价应重点关注三类指标。第一类是能量转换指标，包括光伏端 MPPT 效果、整机效率、母线纹波和逆变输出质量；第二类是动态控制指标，包括负载阶跃时的电压跌落、恢复时间和模式切换冲击；第三类是安全与可靠性指标，包括 BMS 保护动作、故障锁存、通信异常处理和温升裕量。
+
+\todo{待样机测试完成后，补充效率曲线、输出电压波形、负载阶跃波形、温升热像图和保护动作记录。}

@@ -1,0 +1,18 @@
+# LaTeX / XeLaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.pdf
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.xdv
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+
+# OS
+.DS_Store
+Thumbs.db

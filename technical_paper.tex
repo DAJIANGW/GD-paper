@@ -1,0 +1,119 @@
+\documentclass[12pt, a4paper, UTF8]{article}
+
+% 必需宏包
+\usepackage[left=2cm,right=2cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{ctex}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{caption}
+\usepackage{footmisc} % 脚注格式
+\usepackage{enumitem} % 启用自定义列表参数
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{setspace}
+
+% 英文字体
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+\setmonofont{Consolas}
+
+
+% 页眉页脚（篇眉：宋体五号，居中）
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{\songti\zihao{5} 第二十一届中国研究生电子设计竞赛\\多MCU协同光储逆变一体化数字电源系统}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{28pt}
+
+% 标题格式（严格对齐规范）
+\titleformat{\section}
+  {\centering\heiti\zihao{-2}} % 黑体小二号（18pt），居中
+  {第\thesection 章}
+  {1em}{}
+
+\titleformat{\subsection}
+  {\heiti\zihao{-3}} % 黑体小三号（14pt），顶头
+  {\thesubsection}
+  {1em}{}
+
+\titleformat{\subsubsection}
+  {\heiti\zihao{-4}} % 黑体小四号（12pt），顶头
+  {\thesubsubsection}
+  {1em}{}
+
+
+% 脚注格式：宋体小五号 + 全文连续编号 + ①②③样式
+\usepackage{pifont}
+\renewcommand{\thefootnote}{\ding{\numexpr171+\value{footnote}}} % ①②③...
+\renewcommand{\footnotelayout}{\songti\zihao{-5}} % 宋体小五号
+
+% 目录格式（按之前要求）
+\renewcommand{\contentsname}{}
+\titlecontents{section}
+  [0em]
+  {\heiti\zihao{4}} % 四号黑体
+  {第\thecontentslabel\ 章\ }
+  {}
+  {\titlerule*[0.8pc]{.}\contentspage}
+\titlecontents{subsection}
+  [2em]
+  {\songti\zihao{-4}} % 小四宋体
+  {\thecontentslabel\ }
+  {}
+  {\titlerule*[0.8pc]{.}\contentspage}
+\titlecontents{subsubsection}
+  [4em]
+  {\songti\zihao{-4}} % 小四宋体
+  {\thecontentslabel\ }
+  {}
+  {\titlerule*[0.8pc]{.}\contentspage}
+
+% 链接无框
+\usepackage[hidelinks]{hyperref}
+
+% 附件 3：正文段落与标题固定行距 20 pt（Word「固定值 20 磅」；article 12 pt 下 \normalsize
+% 默认行距约 14.5 pt，故 \setstretch{20/14.5}）。若标题需绝对 20 pt 行距，再在 \titleformat 内单独设。
+\AtBeginDocument{\setstretch{1.379310}}
+
+\newcommand{\todo}[1]{\textbf{TODO：#1}}
+
+\begin{document}
+
+\input{sections/00-cover.tex}
+
+% ================= 前置部分无页码 =================
+\pagestyle{empty}
+\input{sections/abstract.tex}
+
+% ================= 目录 =================
+\clearpage
+\begin{center}
+\heiti\zihao{3} 目\quad 录
+\end{center}
+%\vspace{1em}
+\tableofcontents
+
+% ================= 正文开始 =================
+\clearpage
+\pagestyle{fancy}
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\input{sections/01-innovation.tex}
+\clearpage
+\input{sections/02-design.tex}
+\clearpage
+\input{sections/03-hardware.tex}
+\clearpage
+\input{sections/04-software.tex}
+\clearpage
+\input{sections/05-test.tex}
+\clearpage
+\input{sections/06-conclusion.tex}
+\clearpage
+\input{sections/07-references.tex}
+
+\end{document}
