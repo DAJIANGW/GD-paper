@@ -1,23 +1,23 @@
 \clearpage
 \section*{摘要}
 
-针对家庭储能、分布式光伏和离网备用供电对高效率、高可靠性和智能化管理的需求，本文设计并实现了一套多 MCU 协同光储逆变一体化数字电源系统。系统面向小型家庭能源场景，集成光伏输入、储能电池管理、直流母线稳压、单相逆变输出和无线监控等功能，形成从新能源接入到交流负载供电的完整闭环。
+针对家庭储能、分布式光伏和离网备用供电对高效率、高可靠性和智能化管理的需求，本文设计并实现了一套多 MCU 协同光储一体化数字电源系统。系统面向小型家庭能源场景，集成光伏输入、储能电池管理、直流母线稳压、单相交流输出和无线监控等功能，形成从新能源接入到交流负载供电的完整闭环。
 
-系统采用非隔离三端口功率变换架构，将光伏端口、储能端口和直流母线端口统一到前级功率变换器中，并通过后级逆变单元输出 220 V/50 Hz 单相交流电。控制系统由 GD32G553、GD32C113 和 GD32VW553 三颗 MCU 协同完成：GD32G553 负责主功率变换、MPPT、母线稳压和逆变控制；GD32C113 负责电池电压、电流、温度采样以及 SOC 估算、均衡和保护；GD32VW553 负责无线联网、参数配置、运行日志和告警信息管理。通过功能解耦与通信协同，系统兼顾功率控制实时性、电池安全性和用户侧可观测性。
+系统采用非隔离三端口功率变换架构，将光伏端口、储能端口和直流母线端口统一到前级功率变换器中，并通过后级交流变换单元输出 220 V/50 Hz 单相交流电。控制系统由 GD32G553、GD32C113 和 GD32VW553 三颗 MCU 协同完成：GD32G553 负责主功率变换、MPPT、母线稳压和交流控制；GD32C113 负责电池电压、电流、温度采样以及 SOC 估算、均衡和保护；GD32VW553 负责无线联网、参数配置、运行日志和告警信息管理。通过功能解耦与通信协同，系统兼顾功率控制实时性、电池安全性和用户侧可观测性。
 
 本文重点阐述系统难点与创新、总体方案、主功率电路、控制电路、软件流程及测试验证方法。系统实现了光伏 MPPT 跟踪、光储多模态能量调度、离网工况下电压/频率稳定控制、SOC 估算和多级安全保护。初步设计表明，该方案具备结构紧凑、控制灵活、扩展性好和工程落地成本较低等特点，可为户用光储一体化设备和小型备用电源提供一种基于国产 MCU 的数字控制实现路径。
 
 \vspace{1em}
-\noindent\textbf{关键词：} 光储逆变；三端口变换器；多 MCU 协同；GD32；MPPT；BMS
+\noindent\textbf{关键词：} 光储一体化；三端口变换器；多 MCU 协同；GD32；MPPT；BMS
 
 \clearpage
 \section*{Abstract}
 
-To meet the requirements of household energy storage, distributed photovoltaic generation, and off-grid backup power supply, this paper presents an integrated photovoltaic-storage-inverter digital power system based on multi-MCU coordination. The system integrates photovoltaic input, battery management, DC bus regulation, single-phase inverter output, and wireless monitoring, providing a complete energy conversion path from renewable energy input to AC load supply.
+To meet the requirements of household energy storage, distributed photovoltaic generation, and off-grid backup power supply, this paper presents an integrated photovoltaic-storage digital power system based on multi-MCU coordination. The system integrates photovoltaic input, battery management, DC bus regulation, single-phase AC output, and wireless monitoring, providing a complete energy conversion path from renewable energy input to AC load supply.
 
-The proposed system adopts a non-isolated three-port power conversion architecture. The photovoltaic port, battery port, and DC bus port are coordinated by the front-stage converter, while the rear-stage inverter generates 220 V/50 Hz single-phase AC output. Three GD32 microcontrollers are used for task decomposition and cooperative control. The GD32G553 handles main power conversion, MPPT, DC bus regulation, and inverter control. The GD32C113 performs battery voltage, current, and temperature sampling, SOC estimation, balancing, and protection. The GD32VW553 provides wireless networking, parameter configuration, operation logging, and alarm management. With this architecture, the system balances real-time power control, battery safety, and remote observability.
+The proposed system adopts a non-isolated three-port power conversion architecture. The photovoltaic port, battery port, and DC bus port are coordinated by the front-stage converter, while the rear-stage AC converter generates 220 V/50 Hz single-phase AC output. Three GD32 microcontrollers are used for task decomposition and cooperative control. The GD32G553 handles main power conversion, MPPT, DC bus regulation, and AC output control. The GD32C113 performs battery voltage, current, and temperature sampling, SOC estimation, balancing, and protection. The GD32VW553 provides wireless networking, parameter configuration, operation logging, and alarm management. With this architecture, the system balances real-time power control, battery safety, and remote observability.
 
 This paper describes the technical challenges, innovation points, system architecture, power circuit, control circuit, software flow, and verification plan. The system supports photovoltaic MPPT tracking, multi-mode energy scheduling, off-grid voltage and frequency regulation, SOC estimation, and multi-level protection. The design provides a compact, flexible, and low-cost digital control solution for residential photovoltaic-storage integrated equipment based on domestic MCU devices.
 
 \vspace{1em}
-\noindent\textbf{Keywords:} photovoltaic-storage inverter; three-port converter; multi-MCU coordination; GD32; MPPT; BMS
+\noindent\textbf{Keywords:} photovoltaic-storage integration; three-port converter; multi-MCU coordination; GD32; MPPT; BMS

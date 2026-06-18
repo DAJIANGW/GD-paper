@@ -20,11 +20,17 @@
 \setsansfont{Arial}
 \setmonofont{Consolas}
 
+% 附件 3 要求图表按章编号为“图 m-n”“表 m-n”；本文以 article 的 section 对应“章”。
+\counterwithin{figure}{section}
+\counterwithin{table}{section}
+\renewcommand{\thefigure}{\thesection-\arabic{figure}}
+\renewcommand{\thetable}{\thesection-\arabic{table}}
+
 
 % 页眉页脚（篇眉：宋体五号，居中）
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[C]{\songti\zihao{5} 第二十一届中国研究生电子设计竞赛\\多MCU协同光储逆变一体化数字电源系统}
+\fancyhead[C]{\songti\zihao{5} 第二十一届中国研究生电子设计竞赛\\多MCU协同光储一体化数字电源系统}
 \fancyfoot[C]{\thepage}
 \setlength{\headheight}{28pt}
 
