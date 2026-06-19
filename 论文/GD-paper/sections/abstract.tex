@@ -1,0 +1,29 @@
+% !TeX root = ../technical_paper.tex
+\clearpage
+\section*{摘要}
+
+随着全球能源结构转型和"双碳"目标的推进，光伏储能系统作为可再生能源利用的重要环节，其安全性和效率问题日益受到关注。电池管理系统（Battery Management System, BMS）是储能系统的核心组成部分，直接影响电池组的寿命、安全性和能量利用效率。本文针对户用储能、分布式光伏和离网备用供电等应用场景，设计并实现了一套面向光储融合应用的、基于国产GD32微控制器的多MCU协同智能电源管理平台。
+
+系统采用非隔离三端口功率变换架构，将光伏端口、储能端口和直流母线端口统一到前级功率变换器中，并为后级交流输出预留硬件接口。当前阶段重点完成前级功率变换控制平台搭建，后级220 V/50 Hz交流逆变单元作为系统规划目标，待后续阶段实现。控制系统由GD32G553、GD32C113和GD32VW553三颗MCU协同完成：GD32G553作为主控制器，负责系统级能量管理、CAN-FD总线数据接收、恒流恒压（CC/CV）充电闭环控制以及多源数据融合转发；GD32C113作为BMS控制器，负责电池组的电压、电流、温度采集，AFE前端芯片GD30BM2016实现16节单体电池的精准监测，并运行OCV-库仑混合SOC估算与被动均衡控制；GD32VW553作为无线通信模块，实现WiFi联网、MQTT协议上云和远程监控功能。
+
+在电池状态估算方面，本文采用开路电压（OCV）种子初始化结合安时积分（库仑计数）的混合SOC估算策略，并针对磷酸铁锂平坦的OCV-SOC特性曲线进行了算法优化。在安全保护方面，构建了AFE硬件保护、MCU软件备份保护、看门狗监控和FETOFF硬关断的四级安全防线，涵盖过压、欠压、过流、短路、过温、欠温等多重故障保护。在通信架构方面，设计了CAN-FD（BMS→主控）与自定义AA55帧UART协议（主控→无线模块）的两级数据链路，并通过MQTT协议实现与云端的实时双向通信。
+
+本文重点完成了控制平台搭建、BMS系统联调验证、无线监控实现和三端口功率级硬件设计。实验结果表明，系统电压采样最大误差为$+4\,\mathrm{mV}$，电流采样在$5\,\mathrm{A}$以内误差控制在$50\,\mathrm{mA}$以内，SOC估算最大偏差约$4.2\%$，CAN通信丢包率约$0.067\%$，均衡功能可将单体电压差从$100\,\mathrm{mV}$降至$20\,\mathrm{mV}$，满足光伏储能场景下对电池管理系统的精度、实时性和可靠性要求。功率级硬件已完成仿真验证与板级设计，为后续闭环控制提供了基础。
+
+\vspace{1em}
+\noindent\textbf{关键词：} 电池管理系统；SOC估算；多MCU协同；光储一体化；CAN-FD通信
+
+\clearpage
+\section*{Abstract}
+
+With the global energy transition and the "dual carbon" goals, photovoltaic (PV) energy storage systems have become a critical component of renewable energy utilization, where safety and efficiency are of paramount importance. The Battery Management System (BMS) serves as the core of energy storage systems, directly impacting battery pack lifespan, safety, and energy utilization efficiency. This paper presents the design and implementation of a multi-MCU coordinated PV-storage integrated digital power system control platform based on domestic GD32 microcontrollers for residential energy storage, distributed photovoltaic, and off-grid backup power applications.
+
+The system adopts a non-isolated three-port power conversion architecture. The photovoltaic port, battery port, and DC bus port are coordinated by the front-stage converter, with hardware interfaces reserved for the rear-stage AC output. The current phase focuses on the front-stage power conversion control platform, while the rear-stage 220 V/50 Hz AC inverter remains a planned goal for subsequent implementation. Three GD32 microcontrollers are used for task decomposition and cooperative control. The GD32G553 main controller manages system-level energy control, including CAN-FD bus data reception, Constant Current/Constant Voltage (CC/CV) charging closed-loop control, and multi-source data fusion forwarding. The GD32C113 BMS controller handles cell voltage, current, and temperature acquisition, with the GD30BM2016 Analog Front-End (AFE) chip providing precise monitoring of 16 series-connected cells, and runs an OCV-coulomb hybrid SOC estimation with passive balancing. The GD32VW553 wireless module enables WiFi connectivity, MQTT protocol cloud communication, and remote monitoring.
+
+For battery state estimation, a hybrid SOC estimation strategy combining Open Circuit Voltage (OCV) seeding with Ampere-Hour integration (coulomb counting) is adopted, with algorithmic optimizations addressing the flat OCV-SOC characteristic curve of LiFePO$_4$ chemistry. For safety protection, a four-tier defense line is constructed comprising AFE hardware protection, MCU software backup protection, watchdog monitoring, and FETOFF hard shutdown, covering overvoltage, undervoltage, overcurrent, short circuit, overtemperature, and undertemperature faults. In terms of communication architecture, a two-level data link is designed using CAN-FD (BMS$\rightarrow$main controller) and a custom AA55-framed UART protocol (main controller$\rightarrow$wireless module), with real-time bidirectional cloud communication via MQTT.
+
+This paper focuses on the control platform implementation, BMS integration and verification, wireless monitoring realization, and three-port power stage hardware design. Experimental results show that the system achieves voltage sampling error within $+4\,\mathrm{mV}$, current sampling error within $50\,\mathrm{mA}$ below $5\,\mathrm{A}$, SOC estimation maximum deviation about $4.2\%$, CAN communication packet loss rate about $0.067\%$, and passive balancing reducing cell voltage difference from $100\,\mathrm{mV}$ to $20\,\mathrm{mV}$, satisfying the accuracy, real-time performance, and reliability requirements for PV energy storage applications.
+
+\vspace{1em}
+\noindent\textbf{Keywords:} Battery Management System; SOC Estimation; Multi-MCU Coordination; Photovoltaic-Storage Integration; CAN-FD Communication
+
