@@ -1,20 +1,74 @@
-﻿% !TeX root = ../technical_paper.tex
 \section{软件设计与流程}
 
 \subsection{软件总体架构}
 
 系统软件采用分层状态机架构，自下而上包括驱动层、采样与保护层、控制算法层、能量管理层和通信交互层。驱动层负责 ADC、PWM、定时器、通信接口和 GPIO 初始化；采样与保护层完成数据滤波、量纲转换、阈值判断和故障锁存；控制算法层运行 MPPT、母线稳压、充放电电流控制和交流输出控制；能量管理层根据光伏功率、负载功率、SOC 和故障状态选择工作模式；通信交互层完成 MCU 间数据同步和无线监控。
 
+
+
 \begin{figure}[htbp]
   \centering
-  \fbox{\parbox[c][4cm][c]{0.88\linewidth}{\centering
-  系统上电 $\rightarrow$ 外设初始化 $\rightarrow$ 自检 $\rightarrow$ 预充/软启动\\[0.4em]
-  $\rightarrow$ 模式判断 $\rightarrow$ 闭环控制 $\rightarrow$ 数据上报/故障检测\\[0.4em]
-  $\rightarrow$ 正常运行或保护停机
-  }}
-  \caption{系统主程序流程占位}
-  \label{fig:software_flow}
+  \resizebox{0.96\linewidth}{!}{
+  \begin{tikzpicture}[
+    font=\small,
+    node distance=1.0cm and 1.2cm,
+    process/.style={
+      draw,
+      rounded corners=2pt,
+      align=center,
+      minimum width=2.8cm,
+      minimum height=0.9cm,
+      inner sep=4pt
+    },
+    line/.style={-Latex, thick}
+  ]
+
+  % ===================== 主流程 =====================
+  \node[process] (poweron) {系统上电};
+  \node[process, right=of poweron] (init) {外设初始化};
+  \node[process, right=of init] (selfcheck) {系统自检};
+  \node[process, right=of selfcheck] (precharge) {预充 / 软启动};
+  \node[process, right=of precharge] (mode) {模式判断};
+
+  % ===================== 运行流程 =====================
+  \node[process, below=1.5cm of mode] (control) {闭环控制};
+  \node[process, left=of control] (upload) {数据上报\\故障检测};
+  \node[process, left=of upload] (fault) {故障判断};
+
+  % ===================== 结果状态 =====================
+  \node[process, below=1.5cm of upload] (run) {正常运行};
+  \node[process, below=1.5cm of fault] (protect) {保护停机};
+
+  % ===================== 主流程箭头 =====================
+  \draw[line] (poweron) -- (init);
+  \draw[line] (init) -- (selfcheck);
+  \draw[line] (selfcheck) -- (precharge);
+  \draw[line] (precharge) -- (mode);
+
+  % ===================== 进入闭环 =====================
+  \draw[line] (mode.south) -- node[left]{满足运行条件} (control.north);
+
+  % ===================== 闭环与检测 =====================
+  \draw[line] (control.west) -- (upload.east);
+  \draw[line] (upload.west) -- (fault.east);
+
+  % ===================== 故障判断 =====================
+  \draw[line] (fault.south) -- node[above]{否} (run.north);
+  \draw[line] (fault.south) -- node[left]{是} (protect.north);
+
+  % ===================== 正常运行周期循环：走外圈 =====================
+  \draw[line] (run.east) -- ++(5,0) |- node[above]{周期循环} (mode.east);
+
+  % ===================== 故障恢复：走下方外圈 =====================
+  \draw[line] (protect.west) -- ++(-0.75,0) |- node[pos=0.22, left]{故障清除 / 重新自检} (selfcheck.west);
+
+  \end{tikzpicture}
+  }
+  \caption{系统主程序流程图}
+  \label{fig:main_program_flow}
 \end{figure}
+
+
 
 \subsection{前级三端口控制策略}
 
@@ -66,4 +120,3 @@ MPPT 算法可采用扰动观察法作为基础实现。控制器周期性调整
 无线监控模块主要完成数据可视化、参数配置和故障告警。监控界面建议展示光伏电压电流、光伏功率、电池电压电流、SOC、直流母线电压、交流输出电压、输出功率、系统模式和故障码。参数配置功能包括 MPPT 使能、输出开关、充放电电流限值、SOC 上下限和日志导出。
 
 \todo{补充上位机界面截图、通信协议字段定义和实际无线链路测试结果。}
-
